@@ -11,6 +11,7 @@ public class PhieuNhapSach
     }
 
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaPns {get; set;}
     
     [ForeignKey("NhaPhanPhoi")]

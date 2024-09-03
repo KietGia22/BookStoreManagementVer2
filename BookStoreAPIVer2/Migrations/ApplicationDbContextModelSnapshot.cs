@@ -121,10 +121,6 @@ namespace BookStoreAPIVer2.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("MatKhau")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("timestamp with time zone");
 
