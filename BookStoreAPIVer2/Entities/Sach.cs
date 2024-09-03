@@ -18,6 +18,7 @@ public class Sach
     }
 
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaSach { get; set; }
     
     public string TenSach { get; set; }

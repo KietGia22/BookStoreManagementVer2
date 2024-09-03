@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookStoreAPIVer2.Entities;
 
 public class KhachHang
 {
-    public KhachHang(int maKh, string matKhau, DateTime ngaySinh, string gioiTinh, string sdt, string diaChi, DateTime ngayTao)
+    public KhachHang(int maKh, DateTime ngaySinh, string gioiTinh, string sdt, string diaChi, DateTime ngayTao)
     {
         MaKh = maKh;
-        MatKhau = matKhau;
         NgaySinh = ngaySinh;
         GioiTinh = gioiTinh;
         Sdt = sdt;
@@ -16,9 +16,8 @@ public class KhachHang
     }
 
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaKh { get; set; }
-    
-    public string MatKhau { get; set; }
     
     public DateTime NgaySinh { get; set; }
     

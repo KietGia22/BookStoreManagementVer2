@@ -1,27 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace BookStoreAPIVer2.DTOs;
 
-namespace BookStoreAPIVer2.Entities;
-
-public class NhanVien
+public class NhanVienDTO
 {
-    public NhanVien(){}
-    public NhanVien(int maTk, string matKhau, string hoTen, string diaChi, string gmail, string sdt, string chucVu, long luong, DateTime ngayTaoTaiKhoan, DateTime ngaySinh)
+    public NhanVienDTO(int maTk, string matKhau, string hoTen, DateTime ngaySinh, string diaChi, string gmail, string sdt, string chucVu, long luong, DateTime ngayTaoTaiKhoan)
     {
         MaTk = maTk;
         MatKhau = matKhau;
         HoTen = hoTen;
+        NgaySinh = ngaySinh;
         DiaChi = diaChi;
         Gmail = gmail;
         Sdt = sdt;
         ChucVu = chucVu;
         Luong = luong;
         NgayTaoTaiKhoan = ngayTaoTaiKhoan;
-        NgaySinh = ngaySinh;
     }
 
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaTk { get; set; }
     
     public string MatKhau { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookStoreAPIVer2.Entities;
 
@@ -13,6 +14,7 @@ public class NhaPhanPhoi
     }
 
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaNpp { get; set; }
     
     public string TenNpp { get; set; }

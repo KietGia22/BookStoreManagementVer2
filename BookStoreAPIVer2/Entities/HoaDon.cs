@@ -6,6 +6,7 @@ namespace BookStoreAPIVer2.Entities;
 public class HoaDon
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaHd { get; set; }
     
     [ForeignKey("KhachHang")]
