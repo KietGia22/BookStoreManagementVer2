@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text.RegularExpressions;
+using AutoMapper;
 using BookStoreAPIVer2.DTOs;
 using BookStoreAPIVer2.Entities;
 using BookStoreAPIVer2.Repository.IRepository;
@@ -22,6 +23,9 @@ public class AuthService  : IAuthServiece
 
     public async Task<NhanVienDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
     {
+        
+        CheckEmployeeBeforeInsert(registerEmployeeRequestDTO);
+        
         NhanVien nv = new()
         {
             HoTen = registerEmployeeRequestDTO.HoTen,
@@ -41,6 +45,9 @@ public class AuthService  : IAuthServiece
 
     public async Task<KhachHangDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO)
     {
+        
+        CheckCustomerBeforeInsert(registerCustomerRequestDTO);
+        
         KhachHang kh = new()
         {
             HoTenKh = registerCustomerRequestDTO.HoTenKh,
@@ -58,6 +65,9 @@ public class AuthService  : IAuthServiece
 
     public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
     {
+        
+        CheckEmployeeBeforeLogin(loginRequestDTO);
+        
         var tokenReturn = await _authRepo.Login(loginRequestDTO.Gmail, loginRequestDTO.Password);
 
         if (tokenReturn == null)
@@ -70,5 +80,83 @@ public class AuthService  : IAuthServiece
             AccessToken = tokenReturn
         };
         return tokenDto;
+    }
+
+    private void CheckEmployeeBeforeInsert(RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
+    {
+        if (registerEmployeeRequestDTO.MatKhau.Length < 6)
+        {
+            throw new Exception("Mật khẩu không đủ độ dài");
+        }
+        
+        if (registerEmployeeRequestDTO.NgaySinh == DateTime.UtcNow || (DateTime.UtcNow.Year - registerEmployeeRequestDTO.NgaySinh.Year) < 18)
+        {
+            throw new Exception("Nhân viên phải đủ 18 tuổi");
+        }
+
+        if (!_authRepo.IsUniqueUser(registerEmployeeRequestDTO.Gmail))
+        {
+            throw new Exception("Employee already exist");
+        }
+        
+        var emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        if (string.IsNullOrWhiteSpace(registerEmployeeRequestDTO.Gmail) ||
+            Regex.IsMatch(registerEmployeeRequestDTO.Gmail, emailRegex) == false)
+        {
+            throw new Exception("Email không hợp lệ");
+        }
+
+        if (registerEmployeeRequestDTO.ChucVu != "Quan ly" && registerEmployeeRequestDTO.ChucVu != "Nhan vien")
+        {
+            throw new Exception("Chức vụ không hợp lý");
+        }
+        
+        var phoneRegex = @"^0\d{9}$";
+        if (string.IsNullOrWhiteSpace(registerEmployeeRequestDTO.Sdt) ||
+            Regex.IsMatch(registerEmployeeRequestDTO.Sdt, phoneRegex) == false)
+        {
+            throw new Exception("Số điện thoại không hợp lệ");
+        }
+
+        if (registerEmployeeRequestDTO.Luong < 15000)
+        {
+            throw new Exception("Lương của nhân viên ít nhất là 15000 một giờ");
+        }
+    }
+    
+    private void CheckCustomerBeforeInsert(RegisterCustomerRequestDTO registerCustomerRequestDTO)
+    {
+        if (registerCustomerRequestDTO.NgaySinh == DateTime.UtcNow || (DateTime.UtcNow.Year - registerCustomerRequestDTO.NgaySinh.Year) < 15)
+        {
+            throw new Exception("Khách hàng phải đủ 15 tuổi");
+        }
+
+        if (registerCustomerRequestDTO.GioiTinh != "Nam" || registerCustomerRequestDTO.GioiTinh != "Nu")
+        {
+            throw new Exception("Giới tính không hợp lý");
+        }
+        
+        var phoneRegex = @"^0\d{9}$";
+        if (string.IsNullOrWhiteSpace(registerCustomerRequestDTO.Sdt) ||
+            Regex.IsMatch(registerCustomerRequestDTO.Sdt, phoneRegex) == false)
+        {
+            throw new Exception("Số điện thoại không hợp lệ");
+        }
+    }
+
+    private void CheckEmployeeBeforeLogin(LoginRequestDTO loginRequestDTO)
+    {
+        var emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        if (string.IsNullOrWhiteSpace(loginRequestDTO.Gmail) ||
+            Regex.IsMatch(loginRequestDTO.Gmail, emailRegex) == false)
+        {
+            throw new Exception("Email không hợp lệ");
+        }
+        
+        if (_authRepo.IsUniqueUser(loginRequestDTO.Gmail))
+        {
+            throw new Exception("Employee doesn't exist");
+        }
+        
     }
 }
