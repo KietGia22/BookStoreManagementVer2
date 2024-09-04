@@ -6,4 +6,6 @@ namespace BookStoreAPIVer2.Services.IService;
 public interface IAuthServiece
 {
     Task<NhanVienDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO);
+    
+    Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO);
 }

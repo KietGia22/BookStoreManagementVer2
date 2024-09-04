@@ -39,5 +39,25 @@ public class AuthController : Controller
            _response.StatusCode = HttpStatusCode.BadRequest;
            return BadRequest(_response);
        }
-}
+   }
+
+   [HttpPost("login")]
+   public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
+   {
+       try
+       {
+           var tokenDto = await _authServiece.Login(loginRequestDTO);
+           _response.StatusCode = HttpStatusCode.OK;
+           _response.IsSuccess = true;
+           _response.Result = tokenDto;
+           return Ok(_response);
+       }
+       catch (Exception ex)
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { ex.Message };
+           _response.StatusCode = HttpStatusCode.BadRequest;
+           return BadRequest(_response);
+       }
+   }
 }
