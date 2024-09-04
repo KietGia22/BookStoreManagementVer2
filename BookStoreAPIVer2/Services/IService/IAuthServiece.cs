@@ -7,5 +7,7 @@ public interface IAuthServiece
 {
     Task<NhanVienDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO);
     
+    Task <KhachHangDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO);
+    
     Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO);
 }

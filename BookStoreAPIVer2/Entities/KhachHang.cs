@@ -5,7 +5,10 @@ namespace BookStoreAPIVer2.Entities;
 
 public class KhachHang
 {
-    public KhachHang(int maKh, DateTime ngaySinh, string gioiTinh, string sdt, string diaChi, DateTime ngayTao)
+    
+    public KhachHang() {}
+    
+    public KhachHang(int maKh, DateTime ngaySinh, string gioiTinh, string sdt, string diaChi, DateTime ngayTao, string hoTenKh)
     {
         MaKh = maKh;
         NgaySinh = ngaySinh;
@@ -13,11 +16,14 @@ public class KhachHang
         Sdt = sdt;
         DiaChi = diaChi;
         NgayTao = ngayTao;
+        HoTenKh = hoTenKh;
     }
 
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int MaKh { get; set; }
+    
+    public string HoTenKh { get; set; }
     
     public DateTime NgaySinh { get; set; }
     

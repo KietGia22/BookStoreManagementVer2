@@ -10,5 +10,5 @@ public interface IAuthRepository
     
     Task<NhanVien> RegisterEmployee (NhanVien nhanVien);
     
-    //Task<KhachHang> RegisterCustomer (KhachHang khachHang);
+    Task<KhachHang> RegisterCustomer (KhachHang khachHang);
 }

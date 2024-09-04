@@ -35,6 +35,14 @@ public class AuthRepository : IAuthRepository
       return userReturn;
    }
 
+   public async Task<KhachHang> RegisterCustomer(KhachHang khachHang)
+   {
+      await _khachHangs.AddAsync(khachHang);
+      await _db.SaveChangesAsync();
+      var customerReturn = await _khachHangs.FirstOrDefaultAsync(u => u.MaKh == khachHang.MaKh);
+      return customerReturn;
+   }
+
    public async Task<string> Login(string gmail, string password)
    {
       var employee = await _nhanViens.FirstOrDefaultAsync(u => u.Gmail == gmail);
