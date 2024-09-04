@@ -75,11 +75,38 @@ public class AuthService  : IAuthServiece
             throw new Exception("Login failed");
         }
 
-        TokenDTO tokenDto = new TokenDTO
+        var tokenDto = new TokenDTO
         {
             AccessToken = tokenReturn
         };
         return tokenDto;
+    }
+
+    public async Task<UpdateNhanVienDTO> UpdateEmployee(UpdateNhanVienDTO updateNhanVienDTO)
+    {
+        var oldVerEmployee = await _authRepo.GetEmployeeAsync(updateNhanVienDTO.MaTk);
+        var nv = new NhanVien()
+        {
+            MaTk = updateNhanVienDTO.MaTk,
+            HoTen = updateNhanVienDTO.HoTen,
+            NgaySinh = updateNhanVienDTO.NgaySinh,
+            DiaChi = updateNhanVienDTO.DiaChi,
+            Gmail = updateNhanVienDTO.Gmail,
+            Sdt = updateNhanVienDTO.Sdt,
+            ChucVu = updateNhanVienDTO.ChucVu,
+            Luong = updateNhanVienDTO.Luong,
+            NgayTaoTaiKhoan = DateTime.UtcNow,
+            MatKhau = oldVerEmployee.MatKhau
+        };
+        var result = await _authRepo.UpdateEmployee(nv);
+        var employeeReturn = _mapper.Map<UpdateNhanVienDTO>(result);
+        return employeeReturn;
+    }
+
+    public async Task RemoveEmployee(int id)
+    {
+        var employee = await _authRepo.GetEmployeeAsync(id);
+        await _authRepo.RemoveAsync(employee);
     }
 
     private void CheckEmployeeBeforeInsert(RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
@@ -131,7 +158,7 @@ public class AuthService  : IAuthServiece
             throw new Exception("Khách hàng phải đủ 15 tuổi");
         }
 
-        if (registerCustomerRequestDTO.GioiTinh != "Nam" || registerCustomerRequestDTO.GioiTinh != "Nu")
+        if (registerCustomerRequestDTO.GioiTinh != "Nam" && registerCustomerRequestDTO.GioiTinh != "Nu")
         {
             throw new Exception("Giới tính không hợp lý");
         }

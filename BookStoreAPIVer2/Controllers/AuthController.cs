@@ -79,4 +79,50 @@ public class AuthController : Controller
            return BadRequest(_response);
        }
    }
+
+   [HttpPut("updateEmployee")]
+   public async Task<IActionResult> UpdateEmployee([FromBody] UpdateNhanVienDTO updateNhanVienDTO)
+   {
+       try
+       {
+            var employee = await _authServiece.UpdateEmployee(updateNhanVienDTO);
+            _response.StatusCode = HttpStatusCode.NoContent;
+            _response.IsSuccess = true;
+            _response.Result = employee;
+            return Ok(_response);
+       }
+       catch (Exception ex)
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { ex.Message };
+           _response.StatusCode = HttpStatusCode.BadRequest;
+           return BadRequest(_response);
+       }
+   }
+
+   [HttpDelete("{id:int}", Name = "RemoveEmployee")]
+   public async Task<IActionResult> RemoveEmployee(int id)
+   {
+       try
+       {
+           await _authServiece.RemoveEmployee(id);
+           _response.StatusCode = HttpStatusCode.NoContent;
+           _response.IsSuccess = true;
+           return Ok(_response);
+       }
+       catch (KeyNotFoundException ex)
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { ex.Message };
+           _response.StatusCode = HttpStatusCode.NotFound;
+           return NotFound(_response);
+       }
+       catch (Exception ex)
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { ex.Message };
+           _response.StatusCode = HttpStatusCode.BadRequest;
+           return BadRequest(_response);
+       }
+   }
 }

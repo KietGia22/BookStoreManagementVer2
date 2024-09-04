@@ -27,6 +27,12 @@ public class AuthRepository : IAuthRepository
       this._khachHangs = _db.Set<KhachHang>();
    }
 
+   public async Task<NhanVien> GetEmployeeAsync(int id)
+   {
+      var employee = await _nhanViens.AsNoTracking().Where(u => u.MaTk == id).FirstOrDefaultAsync();
+      return employee;
+   }
+
    public async Task<NhanVien> RegisterEmployee(NhanVien nhanVien)
    {
       await _nhanViens.AddAsync(nhanVien);
@@ -55,6 +61,19 @@ public class AuthRepository : IAuthRepository
       var accessToken = await GetAccessToken(employee, jwtTokenId);
 
       return accessToken;
+   }
+
+   public async Task<NhanVien> UpdateEmployee(NhanVien nhanVien)
+   {
+      _nhanViens.Update(nhanVien);
+      await _db.SaveChangesAsync();
+      return nhanVien;
+   }
+
+   public async Task RemoveAsync(NhanVien nhanVien)
+   {
+      _nhanViens.Remove(nhanVien);
+      await _db.SaveChangesAsync();
    }
 
    public bool IsUniqueUser(string gmail)

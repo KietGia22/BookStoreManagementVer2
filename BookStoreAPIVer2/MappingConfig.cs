@@ -9,6 +9,8 @@ public class MappingConfig : Profile
     public MappingConfig()
     {
         CreateMap<NhanVien, NhanVienDTO>().ReverseMap();
+
+        CreateMap<NhanVien, UpdateNhanVienDTO>().ReverseMap();
         
         CreateMap<KhachHang, KhachHangDTO>().ReverseMap();
     }
