@@ -38,4 +38,20 @@ public class AuthService  : IAuthServiece
         var userReturn = _mapper.Map<NhanVienDTO>(employee);
         return userReturn;
     }
+
+    public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
+    {
+        var tokenReturn = await _authRepo.Login(loginRequestDTO.Gmail, loginRequestDTO.Password);
+
+        if (tokenReturn == null)
+        {
+            throw new Exception("Login failed");
+        }
+
+        TokenDTO tokenDto = new TokenDTO
+        {
+            AccessToken = tokenReturn
+        };
+        return tokenDto;
+    }
 }
