@@ -41,6 +41,25 @@ public class AuthController : Controller
        }
    }
 
+   [HttpPost("registerCustomer")]
+   public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequestDTO registerCustomerRequestDTO)
+   {
+       try
+       {
+           var customer = await _authServiece.RegisterCustomer(registerCustomerRequestDTO);
+           _response.Result = customer;
+           _response.StatusCode = HttpStatusCode.OK;
+           return Ok(_response);
+       }
+       catch (Exception ex)
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { ex.Message };
+           _response.StatusCode = HttpStatusCode.BadRequest;
+           return BadRequest(_response);
+       }
+   }
+
    [HttpPost("login")]
    public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
    {

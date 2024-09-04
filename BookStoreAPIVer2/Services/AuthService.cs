@@ -39,6 +39,23 @@ public class AuthService  : IAuthServiece
         return userReturn;
     }
 
+    public async Task<KhachHangDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO)
+    {
+        KhachHang kh = new()
+        {
+            HoTenKh = registerCustomerRequestDTO.HoTenKh,
+            DiaChi = registerCustomerRequestDTO.DiaChi,
+            NgaySinh = registerCustomerRequestDTO.NgaySinh,
+            GioiTinh = registerCustomerRequestDTO.GioiTinh,
+            Sdt = registerCustomerRequestDTO.Sdt,
+            NgayTao = DateTime.UtcNow
+        };
+
+        var customer = await _authRepo.RegisterCustomer(kh);
+        var customerReturn = _mapper.Map<KhachHangDTO>(customer);
+        return customerReturn;
+    }
+
     public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
     {
         var tokenReturn = await _authRepo.Login(loginRequestDTO.Gmail, loginRequestDTO.Password);
