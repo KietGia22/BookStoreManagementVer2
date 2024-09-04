@@ -2,9 +2,8 @@
 
 public class NhanVienDTO
 {
-    public NhanVienDTO(int maTk, string hoTen, DateTime ngaySinh, string diaChi, string gmail, string sdt, string chucVu, long luong, DateTime ngayTaoTaiKhoan)
+    public NhanVienDTO(string hoTen, DateTime ngaySinh, string diaChi, string gmail, string sdt, string chucVu, long luong, DateTime ngayTaoTaiKhoan)
     {
-        MaTk = maTk;
         HoTen = hoTen;
         NgaySinh = ngaySinh;
         DiaChi = diaChi;
@@ -14,8 +13,6 @@ public class NhanVienDTO
         Luong = luong;
         NgayTaoTaiKhoan = ngayTaoTaiKhoan;
     }
-
-    public int MaTk { get; set; }
 
     public string HoTen { get; set; }
     
