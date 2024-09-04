@@ -57,6 +57,18 @@ public class AuthRepository : IAuthRepository
       return accessToken;
    }
 
+   public bool IsUniqueUser(string gmail)
+   {
+      var employee = _nhanViens.FirstOrDefault(u => u.Gmail == gmail);
+
+      if (employee == null)
+      {
+         return true;
+      }
+
+      return false;
+   }
+   
    private async Task<string> GetAccessToken(NhanVien nv, string jwtTokenId)
    {
       var tokenHandler = new JwtSecurityTokenHandler();
