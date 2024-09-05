@@ -4,17 +4,17 @@ namespace BookStoreAPIVer2.Repository.IRepository;
 
 public interface IAuthRepository
 {
-    Task<NhanVien> GetEmployeeAsync(int id);
+    Task<Employee> GetEmployeeAsync(int id);
     
     Task<string> Login (string gmail, string passWord);
     
-    Task<NhanVien> RegisterEmployee (NhanVien nhanVien);
+    Task<Employee> RegisterEmployee (Employee nhanVien);
     
-    Task<KhachHang> RegisterCustomer (KhachHang khachHang);
+    Task<Customer> RegisterCustomer (Customer khachHang);
     
-    Task<NhanVien> UpdateEmployee (NhanVien nhanVien);
+    Task<Employee> UpdateEmployee (Employee nhanVien);
 
-    Task RemoveAsync(NhanVien nhanVien);
+    Task RemoveAsync(Employee nhanVien);
     
     public bool IsUniqueUser(string gmail);
 

@@ -11,34 +11,25 @@ namespace BookStoreAPIVer2.Data
         {
         }
 
-        public DbSet<NhanVien> NhanVien { get; set; }
-        public DbSet<KhachHang> KhachHang { get; set; }
-        public DbSet<TheLoai> TheLoai { get; set; }
-        public DbSet<Sach> Sach { get; set; }
-        public DbSet<NhaPhanPhoi> NhaPhanPhoi { get; set; }
-        public DbSet<PhieuNhapSach> PhieuNhapSach { get; set; }
-        public DbSet<HoaDon> HoaDon { get; set; }
-        public DbSet<Cthd> Cthd { get; set; }
-        public DbSet<CtpnSach> CtpnSach { get; set; }
-        public DbSet<ChamCong> ChamCong { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+        public DbSet<TimeKeeping> TimeKeepings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ChamCong>().HasKey(c => new { c.MaTk, c.BatDauLam });
+            modelBuilder.Entity<TimeKeeping>().HasKey(c => new { c.AccId, c.StartTime });
 
-            modelBuilder.Entity<CtpnSach>().HasKey(c => new { c.MaPns, c.MaSach });
+            modelBuilder.Entity<InvoiceDetail>().HasKey(c => new { c.InvoiceId, c.BookId });
 
-            modelBuilder.Entity<Cthd>().HasKey(c => new { c.MaHd, c.MaSach });
+            modelBuilder.Entity<TimeKeeping>().HasOne(c => c.Employee).WithMany().HasForeignKey(c => c.AccId);
 
-            modelBuilder.Entity<ChamCong>().HasOne(c => c.NhanVien).WithMany().HasForeignKey(c => c.MaTk);
+            modelBuilder.Entity<InvoiceDetail>().HasOne(c => c.Book).WithMany().HasForeignKey(c => c.BookId);
 
-            modelBuilder.Entity<CtpnSach>().HasOne(c => c.PhieuNhapSach).WithMany().HasForeignKey(c => c.MaPns);
-
-            modelBuilder.Entity<CtpnSach>().HasOne(c => c.Sach).WithMany().HasForeignKey(c => c.MaSach);
-
-            modelBuilder.Entity<Cthd>().HasOne(c => c.Sach).WithMany().HasForeignKey(c => c.MaSach);
-
-            modelBuilder.Entity<Cthd>().HasOne(c => c.HoaDon).WithMany().HasForeignKey(c => c.MaHd);
+            modelBuilder.Entity<InvoiceDetail>().HasOne(c => c.Invoice).WithMany().HasForeignKey(c => c.InvoiceId);
 
             base.OnModelCreating((modelBuilder));
         }

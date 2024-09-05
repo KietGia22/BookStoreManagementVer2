@@ -11,55 +11,55 @@ namespace BookStoreAPIVer2.Services;
 public class AuthService  : IAuthServiece
 {
     private readonly IAuthRepository _authRepo;
-    private readonly PasswordHasher<NhanVien> _passwordHasher;
+    private readonly PasswordHasher<Employee> _passwordHasher;
     private readonly IMapper _mapper;
 
     public AuthService(IAuthRepository authRepo, IMapper mapper)
     {
         _authRepo = authRepo;
-        _passwordHasher = new PasswordHasher<NhanVien>();
+        _passwordHasher = new PasswordHasher<Employee>();
         _mapper = mapper;
     }
 
-    public async Task<NhanVienDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
+    public async Task<EmployeeDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
     {
         
         CheckEmployeeBeforeInsert(registerEmployeeRequestDTO);
         
-        NhanVien nv = new()
+        Employee nv = new()
         {
-            HoTen = registerEmployeeRequestDTO.HoTen,
-            NgaySinh = registerEmployeeRequestDTO.NgaySinh,
-            DiaChi = registerEmployeeRequestDTO.DiaChi,
-            ChucVu = registerEmployeeRequestDTO.ChucVu,
+            Name = registerEmployeeRequestDTO.Name,
+            Birthday = registerEmployeeRequestDTO.Birthday,
+            Address = registerEmployeeRequestDTO.Address,
+            Title = registerEmployeeRequestDTO.Title,
             Gmail = registerEmployeeRequestDTO.Gmail,
-            Sdt = registerEmployeeRequestDTO.Sdt,
-            Luong = registerEmployeeRequestDTO.Luong,
-            NgayTaoTaiKhoan = DateTime.UtcNow
+            Phone = registerEmployeeRequestDTO.Phone,
+            Salary = registerEmployeeRequestDTO.Salary,
+            CreateDate = DateTime.UtcNow
         };
-        nv.MatKhau = _passwordHasher.HashPassword(nv, registerEmployeeRequestDTO.MatKhau);
+        nv.Password = _passwordHasher.HashPassword(nv, registerEmployeeRequestDTO.Password);
         var employee = await _authRepo.RegisterEmployee(nv);
-        var userReturn = _mapper.Map<NhanVienDTO>(employee);
+        var userReturn = _mapper.Map<EmployeeDTO>(employee);
         return userReturn;
     }
 
-    public async Task<KhachHangDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO)
+    public async Task<CustomerDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO)
     {
         
         CheckCustomerBeforeInsert(registerCustomerRequestDTO);
         
-        KhachHang kh = new()
+        Customer kh = new()
         {
-            HoTenKh = registerCustomerRequestDTO.HoTenKh,
-            DiaChi = registerCustomerRequestDTO.DiaChi,
-            NgaySinh = registerCustomerRequestDTO.NgaySinh,
-            GioiTinh = registerCustomerRequestDTO.GioiTinh,
-            Sdt = registerCustomerRequestDTO.Sdt,
-            NgayTao = DateTime.UtcNow
+            Name = registerCustomerRequestDTO.Name,
+            Address = registerCustomerRequestDTO.Address,
+            Birthday = registerCustomerRequestDTO.Birthday,
+            Gender = registerCustomerRequestDTO.Gender,
+            Phone = registerCustomerRequestDTO.Phone,
+            CreateDate = DateTime.UtcNow
         };
 
         var customer = await _authRepo.RegisterCustomer(kh);
-        var customerReturn = _mapper.Map<KhachHangDTO>(customer);
+        var customerReturn = _mapper.Map<CustomerDTO>(customer);
         return customerReturn;
     }
 
@@ -82,24 +82,24 @@ public class AuthService  : IAuthServiece
         return tokenDto;
     }
 
-    public async Task<UpdateNhanVienDTO> UpdateEmployee(UpdateNhanVienDTO updateNhanVienDTO)
+    public async Task<UpdateEmployeeDTO> UpdateEmployee(UpdateEmployeeDTO updateNhanVienDTO)
     {
-        var oldVerEmployee = await _authRepo.GetEmployeeAsync(updateNhanVienDTO.MaTk);
-        var nv = new NhanVien()
+        var oldVerEmployee = await _authRepo.GetEmployeeAsync(updateNhanVienDTO.AccID);
+        var nv = new Employee()
         {
-            MaTk = updateNhanVienDTO.MaTk,
-            HoTen = updateNhanVienDTO.HoTen,
-            NgaySinh = updateNhanVienDTO.NgaySinh,
-            DiaChi = updateNhanVienDTO.DiaChi,
+            AccID = updateNhanVienDTO.AccID,
+            Name = updateNhanVienDTO.Name,
+            Birthday = updateNhanVienDTO.Birthday,
+            Address = updateNhanVienDTO.Address,
             Gmail = updateNhanVienDTO.Gmail,
-            Sdt = updateNhanVienDTO.Sdt,
-            ChucVu = updateNhanVienDTO.ChucVu,
-            Luong = updateNhanVienDTO.Luong,
-            NgayTaoTaiKhoan = DateTime.UtcNow,
-            MatKhau = oldVerEmployee.MatKhau
+            Phone = updateNhanVienDTO.Phone,
+            Title = updateNhanVienDTO.Title,
+            Salary = updateNhanVienDTO.Salary,
+            CreateDate = DateTime.UtcNow,
+            Password = oldVerEmployee.Password
         };
         var result = await _authRepo.UpdateEmployee(nv);
-        var employeeReturn = _mapper.Map<UpdateNhanVienDTO>(result);
+        var employeeReturn = _mapper.Map<UpdateEmployeeDTO>(result);
         return employeeReturn;
     }
 
@@ -111,12 +111,12 @@ public class AuthService  : IAuthServiece
 
     private void CheckEmployeeBeforeInsert(RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
     {
-        if (registerEmployeeRequestDTO.MatKhau.Length < 6)
+        if (registerEmployeeRequestDTO.Password.Length < 6)
         {
             throw new Exception("Mật khẩu không đủ độ dài");
         }
         
-        if (registerEmployeeRequestDTO.NgaySinh == DateTime.UtcNow || (DateTime.UtcNow.Year - registerEmployeeRequestDTO.NgaySinh.Year) < 18)
+        if (registerEmployeeRequestDTO.Birthday == DateTime.UtcNow || (DateTime.UtcNow.Year - registerEmployeeRequestDTO.Birthday.Year) < 18)
         {
             throw new Exception("Nhân viên phải đủ 18 tuổi");
         }
@@ -133,19 +133,19 @@ public class AuthService  : IAuthServiece
             throw new Exception("Email không hợp lệ");
         }
 
-        if (registerEmployeeRequestDTO.ChucVu != "Quan ly" && registerEmployeeRequestDTO.ChucVu != "Nhan vien")
+        if (registerEmployeeRequestDTO.Title != "Quan ly" && registerEmployeeRequestDTO.Title != "Nhan vien")
         {
             throw new Exception("Chức vụ không hợp lý");
         }
         
         var phoneRegex = @"^0\d{9}$";
-        if (string.IsNullOrWhiteSpace(registerEmployeeRequestDTO.Sdt) ||
-            Regex.IsMatch(registerEmployeeRequestDTO.Sdt, phoneRegex) == false)
+        if (string.IsNullOrWhiteSpace(registerEmployeeRequestDTO.Phone) ||
+            Regex.IsMatch(registerEmployeeRequestDTO.Phone, phoneRegex) == false)
         {
             throw new Exception("Số điện thoại không hợp lệ");
         }
 
-        if (registerEmployeeRequestDTO.Luong < 15000)
+        if (registerEmployeeRequestDTO.Salary < 15000)
         {
             throw new Exception("Lương của nhân viên ít nhất là 15000 một giờ");
         }
@@ -153,19 +153,19 @@ public class AuthService  : IAuthServiece
     
     private void CheckCustomerBeforeInsert(RegisterCustomerRequestDTO registerCustomerRequestDTO)
     {
-        if (registerCustomerRequestDTO.NgaySinh == DateTime.UtcNow || (DateTime.UtcNow.Year - registerCustomerRequestDTO.NgaySinh.Year) < 15)
+        if (registerCustomerRequestDTO.Birthday == DateTime.UtcNow || (DateTime.UtcNow.Year - registerCustomerRequestDTO.Birthday.Year) < 15)
         {
             throw new Exception("Khách hàng phải đủ 15 tuổi");
         }
 
-        if (registerCustomerRequestDTO.GioiTinh != "Nam" && registerCustomerRequestDTO.GioiTinh != "Nu")
+        if (registerCustomerRequestDTO.Gender != "Nam" && registerCustomerRequestDTO.Gender != "Nu")
         {
             throw new Exception("Giới tính không hợp lý");
         }
         
         var phoneRegex = @"^0\d{9}$";
-        if (string.IsNullOrWhiteSpace(registerCustomerRequestDTO.Sdt) ||
-            Regex.IsMatch(registerCustomerRequestDTO.Sdt, phoneRegex) == false)
+        if (string.IsNullOrWhiteSpace(registerCustomerRequestDTO.Phone) ||
+            Regex.IsMatch(registerCustomerRequestDTO.Phone, phoneRegex) == false)
         {
             throw new Exception("Số điện thoại không hợp lệ");
         }

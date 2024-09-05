@@ -8,10 +8,10 @@ public class MappingConfig : Profile
 {
     public MappingConfig()
     {
-        CreateMap<NhanVien, NhanVienDTO>().ReverseMap();
+        CreateMap<Employee, EmployeeDTO>().ReverseMap();
 
-        CreateMap<NhanVien, UpdateNhanVienDTO>().ReverseMap();
+        CreateMap<Employee, UpdateEmployeeDTO>().ReverseMap();
         
-        CreateMap<KhachHang, KhachHangDTO>().ReverseMap();
+        CreateMap<Customer, CustomerDTO>().ReverseMap();
     }
 }

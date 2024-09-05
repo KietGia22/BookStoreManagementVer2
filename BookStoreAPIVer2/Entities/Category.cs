@@ -3,16 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BookStoreAPIVer2.Entities;
 
-public class TheLoai
+public class Category
 {
-    public TheLoai(string tenTheLoai)
-    {
-        TenTheLoai = tenTheLoai;
-    }
-
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int MaTl { get; set; }
+    public int CategoryId { get; set; }
     
-    public string TenTheLoai { get; set; }
+    public string CategoryName { get; set; }
 }

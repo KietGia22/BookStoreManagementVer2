@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BookStoreAPIVer2.Entities;
 
-public class Cthd
+public class InvoiceDetail
 {
-    public int MaHd { get; set; }
+    public int InvoiceId { get; set; }
     
-    public int MaSach { get; set; }
+    public int BookId { get; set; }
     
-    public long SoLuongMuaTungCuonSach { get; set; }
+    public long Quantity { get; set; }
     
-    public Sach Sach { get; set; }
+    public Book Book { get; set; }
     
-    public HoaDon HoaDon { get; set; }
+    public Invoice Invoice { get; set; }
 }
