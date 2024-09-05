@@ -1,6 +1,6 @@
 ﻿namespace BookStoreAPIVer2.DTOs;
 
-public class RegisterCustomerRequestDTO
+public class CustomerDTO
 {
     public string Name { get; set; }
     
@@ -11,4 +11,6 @@ public class RegisterCustomerRequestDTO
     public string Phone { get; set; }
     
     public string Address { get; set; }
+    
+    public DateTime CreateDate { get; set; }
 }

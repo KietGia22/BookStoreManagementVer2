@@ -22,7 +22,7 @@ public class AuthController : Controller
        this._response = new();
    }
 
-   [HttpPost("registerEmployee")]
+   [HttpPost("RegisterEmployee")]
    public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
    {
        try
@@ -41,7 +41,7 @@ public class AuthController : Controller
        }
    }
 
-   [HttpPost("registerCustomer")]
+   [HttpPost("RegisterCustomer")]
    public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequestDTO registerCustomerRequestDTO)
    {
        try
@@ -80,8 +80,8 @@ public class AuthController : Controller
        }
    }
 
-   [HttpPut("updateEmployee")]
-   public async Task<IActionResult> UpdateEmployee([FromBody] UpdateNhanVienDTO updateNhanVienDTO)
+   [HttpPut("UpdateEmployee")]
+   public async Task<IActionResult> UpdateEmployee([FromBody] UpdateEmployeeDTO updateNhanVienDTO)
    {
        try
        {

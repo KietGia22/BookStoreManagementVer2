@@ -5,11 +5,11 @@ namespace BookStoreAPIVer2.Services.IService;
 
 public interface IAuthServiece
 {
-    Task<NhanVienDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO);
+    Task<EmployeeDTO> RegisterEmployee(RegisterEmployeeRequestDTO registerEmployeeRequestDTO);
     
-    Task <KhachHangDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO);
+    Task <CustomerDTO> RegisterCustomer(RegisterCustomerRequestDTO registerCustomerRequestDTO);
 
-    Task<UpdateNhanVienDTO> UpdateEmployee(UpdateNhanVienDTO updateNhanVienDto);
+    Task<UpdateEmployeeDTO> UpdateEmployee(UpdateEmployeeDTO updateNhanVienDto);
 
     Task RemoveEmployee(int id);
     
