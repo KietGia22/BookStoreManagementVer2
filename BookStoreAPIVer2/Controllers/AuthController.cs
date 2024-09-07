@@ -96,6 +96,14 @@ public class AuthController : Controller
    [Authorize]
    public async Task<IActionResult> UpdateEmployee([FromBody] UpdateEmployeeDTO updateNhanVienDTO)
    {
+       var role = CheckPermission.CheckRoleOfAccount(Request);
+       if (role != "Quan ly")
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { "You do not have permission to access this resource." };
+           _response.StatusCode = HttpStatusCode.Unauthorized;
+           return Unauthorized(_response);
+       }
        try
        {
             var employee = await _authServiece.UpdateEmployee(updateNhanVienDTO);
@@ -117,6 +125,14 @@ public class AuthController : Controller
    [Authorize]
    public async Task<IActionResult> RemoveEmployee(int id)
    {
+       var role = CheckPermission.CheckRoleOfAccount(Request);
+       if (role != "Quan ly")
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { "You do not have permission to access this resource." };
+           _response.StatusCode = HttpStatusCode.Unauthorized;
+           return Unauthorized(_response);
+       }
        try
        {
            await _authServiece.RemoveEmployee(id);
