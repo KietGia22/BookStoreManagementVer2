@@ -38,6 +38,7 @@ builder.Services.AddAuthentication(x =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
             ValidateIssuer = false,
             ValidateAudience = false,
+            ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero,
         };
     });
@@ -73,6 +74,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
