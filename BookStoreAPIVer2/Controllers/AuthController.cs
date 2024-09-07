@@ -1,8 +1,10 @@
 ﻿using System.Net;
 using AutoMapper;
 using BookStoreAPIVer2.DTOs;
+using BookStoreAPIVer2.Helper;
 using BookStoreAPIVer2.Models;
 using BookStoreAPIVer2.Services.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStoreAPIVer2.Controllers;
@@ -23,8 +25,17 @@ public class AuthController : Controller
    }
 
    [HttpPost("RegisterEmployee")]
+   [Authorize]
    public async Task<IActionResult> RegisterEmployee([FromBody] RegisterEmployeeRequestDTO registerEmployeeRequestDTO)
    {
+       var role = CheckPermission.CheckRoleOfAccount(Request);
+       if (role != "Quan ly")
+       {
+           _response.IsSuccess = false;
+           _response.ErrorMessages = new List<string>() { "You do not have permission to access this resource." };
+           _response.StatusCode = HttpStatusCode.Unauthorized;
+           return Unauthorized(_response);
+       }
        try
        {
            var employee = await _authServiece.RegisterEmployee(registerEmployeeRequestDTO);
@@ -42,6 +53,7 @@ public class AuthController : Controller
    }
 
    [HttpPost("RegisterCustomer")]
+   [Authorize]
    public async Task<IActionResult> RegisterCustomer([FromBody] RegisterCustomerRequestDTO registerCustomerRequestDTO)
    {
        try
@@ -81,6 +93,7 @@ public class AuthController : Controller
    }
 
    [HttpPut("UpdateEmployee")]
+   [Authorize]
    public async Task<IActionResult> UpdateEmployee([FromBody] UpdateEmployeeDTO updateNhanVienDTO)
    {
        try
@@ -101,6 +114,7 @@ public class AuthController : Controller
    }
 
    [HttpDelete("{id:int}", Name = "RemoveEmployee")]
+   [Authorize]
    public async Task<IActionResult> RemoveEmployee(int id)
    {
        try

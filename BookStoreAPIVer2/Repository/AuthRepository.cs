@@ -99,7 +99,7 @@ public class AuthRepository : IAuthRepository
          {
             new Claim(ClaimTypes.Email, nv.Gmail.ToString()),
             new Claim(ClaimTypes.NameIdentifier, nv.AccID.ToString()),
-            new Claim(ClaimTypes.Name, nv.Name.ToString())
+            new Claim(ClaimTypes.Role, nv.Title.ToString())
          }),
          Expires = DateTime.UtcNow.AddDays(7),
          SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
