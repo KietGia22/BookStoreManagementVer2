@@ -34,4 +34,9 @@ public class CheckPermission
         
         return roleClaim.Value;
     }
+
+    public static bool CheckUserPermission(HttpRequest request)
+    {
+        return true;
+    }
 }

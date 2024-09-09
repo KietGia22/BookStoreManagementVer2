@@ -13,5 +13,7 @@ public class MappingConfig : Profile
         CreateMap<Employee, UpdateEmployeeDTO>().ReverseMap();
         
         CreateMap<Customer, CustomerDTO>().ReverseMap();
+
+        CreateMap<Category, CategoryDTO>().ReverseMap();
     }
 }

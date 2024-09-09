@@ -13,7 +13,6 @@ namespace BookStoreAPIVer2.Controllers;
 [Route("api/auth")]
 public class AuthController : Controller
 {
-    // GET
    private readonly IAuthServiece _authServiece;
    protected APIResponse _response;
    private readonly IMapper _mapper;
