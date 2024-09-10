@@ -23,6 +23,8 @@ builder.Services.AddScoped<IAuthServiece, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
@@ -81,4 +83,17 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+ApplyMigration();
 app.Run();
+void ApplyMigration()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        if (_db.Database.GetPendingMigrations().Count() > 0)
+        {
+            _db.Database.Migrate();
+        }
+    }
+}
