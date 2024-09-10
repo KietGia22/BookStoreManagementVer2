@@ -4,7 +4,7 @@ using BookStoreAPIVer2.Repository.IRepository;
 
 namespace BookStoreAPIVer2.Repository;
 
-public class CategoryRepository : Reposity<Category>, ICategoryRepository
+public class CategoryRepository : Repository<Category>, ICategoryRepository
 {
     private readonly ApplicationDbContext _db;
 

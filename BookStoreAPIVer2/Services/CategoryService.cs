@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BookStoreAPIVer2.DTOs;
 using BookStoreAPIVer2.Entities;
+using BookStoreAPIVer2.Helper;
 using BookStoreAPIVer2.Repository.IRepository;
 using BookStoreAPIVer2.Services.IService;
 
@@ -33,10 +34,7 @@ public class CategoryService : ICategory
 
     public async Task CreateAsync(CategoryDTO category)
     {
-        if (await _categoryRepository.GetAsync(u => u.CategoryName.ToLower() == category.CategoryName.ToLower()) != null)
-        {
-            throw new Exception($"Category {category.CategoryName} already exists");
-        }
+        await CheckCategoryDTO.CheckCategoryBeforeModify(category, _categoryRepository);
         
         var categoryToCreate = _mapper.Map<Category>(category);
 
@@ -45,10 +43,7 @@ public class CategoryService : ICategory
 
     public async Task<CategoryDTO> UpdateAsync(CategoryDTO category)
     {
-        if (await _categoryRepository.GetAsync(u => u.CategoryName.ToLower() == category.CategoryName.ToLower()) != null)
-        {
-            throw new Exception($"Category {category.CategoryName} already exists");
-        }
+        await CheckCategoryDTO.CheckCategoryBeforeModify(category, _categoryRepository);
         
         var categoryToUpdate = _mapper.Map<Category>(category);
 
