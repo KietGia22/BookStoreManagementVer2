@@ -8,6 +8,5 @@ public interface IRepository<T> where T : class
         int pageSize = 0, int pageNumber = 1);
     Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, string includeProperties = null);
     Task CreateAsync(T entity);
-    Task<T> UpdateAsync(T entity);
     Task SaveAsync();
 }

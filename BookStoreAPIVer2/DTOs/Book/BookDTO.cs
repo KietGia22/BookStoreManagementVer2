@@ -14,7 +14,5 @@ public class BookDTO
     
     public int Quantity { get; set; }
     
-    public string ImageUrl { get; set; }
-    
     public long Price { get; set; }
 }

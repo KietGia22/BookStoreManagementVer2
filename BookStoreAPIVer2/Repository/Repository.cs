@@ -68,15 +68,8 @@ public class Repository<T>: IRepository<T> where T : class
         await dbSet.AddAsync(entity);
         await SaveAsync();
     }
-
-    public async Task<T> UpdateAsync(T entity)
-    {
-        dbSet.Update(entity);
-        await SaveAsync();
-        return entity;
-    }
     
-    public async Task SaveAsync()
+    public async Task SaveAsync() 
     {
         await _db.SaveChangesAsync();
     }

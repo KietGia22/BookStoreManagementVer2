@@ -41,10 +41,6 @@ namespace BookStoreAPIVer2.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
 
@@ -56,6 +52,8 @@ namespace BookStoreAPIVer2.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("BookId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Books");
                 });
@@ -158,6 +156,28 @@ namespace BookStoreAPIVer2.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("BookStoreAPIVer2.Entities.Image", b =>
+                {
+                    b.Property<int>("ImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ImageId"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("ImageId");
+
+                    b.HasIndex("BookId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("BookStoreAPIVer2.Entities.Invoice", b =>
                 {
                     b.Property<int>("InvoiceId")
@@ -179,6 +199,10 @@ namespace BookStoreAPIVer2.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("InvoiceId");
+
+                    b.HasIndex("AccId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Invoices");
                 });
@@ -218,6 +242,47 @@ namespace BookStoreAPIVer2.Migrations
                     b.HasKey("AccId", "StartTime");
 
                     b.ToTable("TimeKeepings");
+                });
+
+            modelBuilder.Entity("BookStoreAPIVer2.Entities.Book", b =>
+                {
+                    b.HasOne("BookStoreAPIVer2.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BookStoreAPIVer2.Entities.Image", b =>
+                {
+                    b.HasOne("BookStoreAPIVer2.Entities.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("BookStoreAPIVer2.Entities.Invoice", b =>
+                {
+                    b.HasOne("BookStoreAPIVer2.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("AccId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookStoreAPIVer2.Entities.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("BookStoreAPIVer2.Entities.InvoiceDetail", b =>

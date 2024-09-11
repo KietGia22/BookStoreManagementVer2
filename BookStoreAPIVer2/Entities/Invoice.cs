@@ -18,4 +18,8 @@ public class Invoice
     public DateTime CreateDate { get; set; }
     
     public long Total { get; set; }
+
+    public Customer Customer { get; set; }
+
+    public Employee Employee { get; set; }
 }
