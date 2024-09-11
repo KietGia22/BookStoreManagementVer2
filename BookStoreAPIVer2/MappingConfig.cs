@@ -25,5 +25,7 @@ public class MappingConfig : Profile
         CreateMap<BookDTO, CreateBookDTO>().ReverseMap();
 
         CreateMap<BookDTO, UpdateBookDTO>().ReverseMap();
+
+        CreateMap<Image, ImageDTO>().ReverseMap();
     }
 }

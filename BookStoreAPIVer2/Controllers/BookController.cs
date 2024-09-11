@@ -82,7 +82,7 @@ public class BookController : Controller
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResponse>> CreateCategory([FromBody] CreateBookDTO bookDto)
+    public async Task<ActionResult<APIResponse>> CreateBook([FromBody] CreateBookDTO bookDto)
     {
         try
         {
@@ -114,7 +114,7 @@ public class BookController : Controller
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResponse>> UpdateCategory(int id, [FromBody] UpdateBookDTO bookDto)
+    public async Task<ActionResult<APIResponse>> UpdateBook(int id, [FromBody] UpdateBookDTO bookDto)
     {
         try
         {
@@ -140,5 +140,30 @@ public class BookController : Controller
             _response.StatusCode = HttpStatusCode.BadRequest;
             return BadRequest(_response);
         }
+    }
+
+    [HttpPost("{id:int}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<APIResponse>> UploadImage(IFormFile image, int id)
+    {
+        try
+        {
+            var imageToCreate = await _bookService.UploadPhotoAsync(image);
+
+            var imageToReturn = await _bookService.AddImageToDbAsync(imageToCreate, id);
+
+            _response.StatusCode = HttpStatusCode.NoContent;
+            _response.IsSuccess = true;
+            _response.Result = imageToReturn;
+            return Ok(_response);
+        } catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessages
+                = new List<string>() { ex.ToString() };
+        }
+        return _response;
     }
 }
