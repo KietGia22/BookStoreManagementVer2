@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BookStoreAPIVer2.DTOs;
+using BookStoreAPIVer2.DTOs.Cart;
 using BookStoreAPIVer2.Entities;
 
 namespace BookStoreAPIVer2;
@@ -27,5 +28,15 @@ public class MappingConfig : Profile
         CreateMap<BookDTO, UpdateBookDTO>().ReverseMap();
 
         CreateMap<Image, ImageDTO>().ReverseMap();
+
+        CreateMap<Cart, CartDTO>().ReverseMap();
+        
+        CreateMap<Cart, UpdateCartDTO>().ReverseMap();
+        
+        CreateMap<Cart, CreateCartDTO>().ReverseMap();
+
+        CreateMap<Order, OrderDTO>().ReverseMap();
+
+        CreateMap<OrderDetail, OrderDetailDTO>().ReverseMap();
     }
 }

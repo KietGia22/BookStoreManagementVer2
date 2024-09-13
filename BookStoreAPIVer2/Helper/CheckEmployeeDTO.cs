@@ -48,7 +48,7 @@ public class CheckEmployeeDTO
         }
     }
     
-    public static void CheckEmployeeBeforeLogin(LoginRequestDTO loginRequestDTO, IAuthRepository _authRepo)
+    public async static void CheckEmployeeBeforeLogin(LoginRequestDTO loginRequestDTO, IAuthRepository _authRepo)
     {
         var emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
         if (string.IsNullOrWhiteSpace(loginRequestDTO.Gmail) ||
