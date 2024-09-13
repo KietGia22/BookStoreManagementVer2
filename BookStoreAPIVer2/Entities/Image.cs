@@ -9,6 +9,7 @@ public class Image
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ImageId { get; set; }
     
+    [ForeignKey("Book")]
     public int BookId { get; set; }
     
     public string ImageUrl { get; set; }
