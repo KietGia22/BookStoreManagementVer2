@@ -38,7 +38,7 @@ public class BookService : IBookService
 
     public async Task CreateAsync(BookDTO bookDto)
     {
-        CheckBookDTO.CheckBookDTOBeforeModify(bookDto, _bookRepository);
+        await CheckBookDTO.CheckBookDTOBeforeModify(bookDto, _bookRepository);
         
         var bookToCreate = _mapper.Map<Book>(bookDto);
 
@@ -48,7 +48,7 @@ public class BookService : IBookService
     public async Task<BookDTO> UpdateAsync(BookDTO bookDto)
     {
         
-        CheckBookDTO.CheckBookDTOBeforeModify(bookDto, _bookRepository);
+        await CheckBookDTO.CheckBookDTOBeforeModify(bookDto, _bookRepository);
         
         var bookToUpdate = _mapper.Map<Book>(bookDto);
 
