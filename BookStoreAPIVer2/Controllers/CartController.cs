@@ -20,6 +20,29 @@ public class CartController : Controller
         this._response = new APIResponse();
     }
 
+    [HttpGet("{customerId:int}")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<APIResponse>> GetCartByCustomerId(int customerId)
+    {
+        try
+        {
+            var cartByCustomerId = await _cartService.GetCartByCustomerId(customerId);
+            _response.StatusCode = HttpStatusCode.OK;
+            _response.IsSuccess = true;
+            _response.Result = cartByCustomerId;
+            return Ok(_response);
+        }
+        catch (Exception ex)
+        {
+            _response.IsSuccess = false;
+            _response.ErrorMessages = new List<string>() { ex.ToString() };
+            _response.StatusCode = HttpStatusCode.BadRequest;
+            return BadRequest(_response);
+        }
+    }
+
     [HttpDelete("{id:int}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]

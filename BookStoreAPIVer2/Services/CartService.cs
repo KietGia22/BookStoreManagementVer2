@@ -17,6 +17,15 @@ public class CartService : ICartService
         _mapper = mapper;
     }
 
+    public async Task<List<CartDTO>> GetCartByCustomerId(int customerId)
+    {
+        var cartByCustomerId = await _cartRepository.GetListAsync(c => c.CustomerId == customerId);
+        
+        var listCartDto = _mapper.Map<List<CartDTO>>(cartByCustomerId);
+        
+        return listCartDto;
+    }
+
     public async Task RemoveItemAsync(int cartId)
     {
         var cartToRemove = await _cartRepository.GetAsync(c => c.CartId == cartId);
@@ -26,8 +35,24 @@ public class CartService : ICartService
     public async Task<CartDTO> AddItemAsync(CreateCartDTO cart)
     {
         var cartToAdd = _mapper.Map<Cart>(cart);
-        
-        var result = await _cartRepository.AddItemAsync(cartToAdd);
+
+        var checkCart = await _cartRepository.GetAsync(c => c.BookId == cart.BookId);
+
+        Cart result;
+
+        if (checkCart == null)
+        {
+            result = await _cartRepository.AddItemAsync(cartToAdd);
+        }
+        else
+        {
+            var newCart = new Cart
+            {
+                CartId = checkCart.CartId,
+                Quantity = cart.Quantity + checkCart.Quantity
+            };
+            result = await _cartRepository.UpdateQuantityAsync(newCart);
+        }
         
         var cartToReturn = _mapper.Map<CartDTO>(result);
         

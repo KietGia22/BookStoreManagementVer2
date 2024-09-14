@@ -16,6 +16,18 @@ public class CartRepository : ICartRepository
         _db = db;
         this.dbSet = db.Set<Cart>();
     }
+    
+    public async Task<List<Cart>> GetListAsync(Expression<Func<Cart, bool>>? filter = null)
+    {
+        IQueryable<Cart> query = dbSet;
+        
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+        
+        return await query.ToListAsync();
+    }
 
     public async Task<Cart> GetAsync(Expression<Func<Cart, bool>>? filter = null)
     {

@@ -12,4 +12,6 @@ public interface ICartRepository
     Task<Cart> UpdateQuantityAsync(Cart cart);
 
     Task<Cart> GetAsync(Expression<Func<Cart, bool>>? filter = null);
+
+    Task<List<Cart>> GetListAsync(Expression<Func<Cart, bool>>? filter = null);
 }
