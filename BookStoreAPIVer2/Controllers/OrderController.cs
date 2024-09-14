@@ -14,10 +14,12 @@ public class OrderController : Controller
 {
     private readonly IOrderService _orderService;
     protected APIResponse _response;
+    private readonly IEmailService _emailService;
 
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService orderService, IEmailService emailService)
     {
         _orderService = orderService;
+        _emailService = emailService;
         this._response = new APIResponse();
     }
 
@@ -25,12 +27,14 @@ public class OrderController : Controller
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<APIResponse>> CreateOrder([FromBody] CreateOrderDTO order)
+    public async Task<ActionResult<APIResponse>> CreateOrder([FromBody] CreateOrderDTO order, string customerEmail)
     {
         try
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var orderDetail = await _orderService.CreateOrderAsync(order, userId);
+
+            _emailService.SendEmailAsync(customerEmail);
 
             _response.IsSuccess = true;
             _response.StatusCode = HttpStatusCode.NoContent;
