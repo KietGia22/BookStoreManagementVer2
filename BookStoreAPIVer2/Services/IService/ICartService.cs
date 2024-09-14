@@ -9,4 +9,6 @@ public interface ICartService
     Task<CartDTO> AddItemAsync(CreateCartDTO cart);
     
     Task<CartDTO> UpdateQuantityAsync(UpdateCartDTO cart);
+
+    Task<List<CartDTO>> GetCartByCustomerId(int customerId);
 }

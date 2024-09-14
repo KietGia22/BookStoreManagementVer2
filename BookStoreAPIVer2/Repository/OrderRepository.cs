@@ -20,12 +20,20 @@ public class OrderRepository : IOrderRepository
     {
         List<Cart> cartOfCustomer = await _db.Carts.Where(c => c.CustomerId == order.CustomerId).ToListAsync();
 
+        if (cartOfCustomer.Count == 0)
+        {
+            throw new Exception("No cart found");
+        }
+
+        //Create new Order Entity
         var newOrder = await _dbSet.AddAsync(order);
         await _db.SaveChangesAsync();
         
+        //Create BookPrice to save bookPrice
         var bookIds = cartOfCustomer.Select(c => c.BookId).Distinct().ToList();
         var bookPrices = await _db.Books.Where(b => bookIds.Contains(b.BookId)).ToDictionaryAsync(b => b.BookId, b => b.Price);
 
+        //Create List of orderDetails
         List<OrderDetail> orderDetails = cartOfCustomer.Select(cart => new OrderDetail
         {
             InvoiceId = newOrder.Entity.OrderId,
@@ -34,12 +42,18 @@ public class OrderRepository : IOrderRepository
             Price = cart.Quantity * bookPrices[cart.BookId],
         }).ToList();
 
+        //Calculate sum of order
         long totalOfOrder = orderDetails.Sum(o => o.Price);
 
+        //Update total
         await UpdateTotalOfOrder(newOrder.Entity, totalOfOrder);
         
+        //Add OrderDetail Entity
         await _db.InvoiceDetails.AddRangeAsync(orderDetails);
         await _db.SaveChangesAsync();
+
+        //Remove Item in Cart
+        await RemoveCartWhenCreateOrder(cartOfCustomer);
         
         return orderDetails;
     }
@@ -50,6 +64,12 @@ public class OrderRepository : IOrderRepository
         
         _db.Entry(order).State = EntityState.Modified;
         
+        await _db.SaveChangesAsync();
+    }
+
+    private async Task RemoveCartWhenCreateOrder(List<Cart> cartOfCustomer)
+    {
+        _db.Carts.RemoveRange(cartOfCustomer);
         await _db.SaveChangesAsync();
     }
 }
