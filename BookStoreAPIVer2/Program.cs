@@ -18,6 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 DotEnv.Load();
 // Add services to the container.
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(Environment.GetEnvironmentVariable("CONNECTION_STRING"));
@@ -63,6 +66,7 @@ builder.Services.AddSwaggerGen();
 Cloudinary cloudinary = new Cloudinary(Environment.GetEnvironmentVariable("CLOUDINARY_URL"));
 cloudinary.Api.Secure = true;
 builder.Services.AddSingleton(cloudinary);
+builder.Services.AddTransient<IEmailService, EmailService>();
 
 var app = builder.Build();
 
@@ -92,6 +96,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors(options => options
+                .WithOrigins()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials()
+            );
 
 app.MapControllers();
 
