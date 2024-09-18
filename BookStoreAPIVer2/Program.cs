@@ -35,6 +35,8 @@ builder.Services.AddScoped<ICartRepository, CartRepository>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ITimeRepository, TimeRepository>();
+builder.Services.AddScoped<ITimeService, TimeService>();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 

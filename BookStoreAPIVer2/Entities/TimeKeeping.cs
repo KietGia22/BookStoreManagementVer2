@@ -11,7 +11,7 @@ namespace BookStoreAPIVer2.Entities
 
         public DateTime EndTime { get; set; }
 
-        public int TotalTime { get; set; }
+        public double TotalTime { get; set; }
 
         public Employee Employee { get; set; }
     }
