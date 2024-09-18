@@ -265,8 +265,8 @@ namespace BookStoreAPIVer2.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("TotalTime")
-                        .HasColumnType("integer");
+                    b.Property<double>("TotalTime")
+                        .HasColumnType("double precision");
 
                     b.HasKey("AccId", "StartTime");
 
